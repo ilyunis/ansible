@@ -1,0 +1,12 @@
+
+---
+
+- name: Test Connection to my servers
+  hosts: "{{ MYHOSTS }}"
+  become: yes
+
+
+  tasks:
+  
+  - name: Ping my servers
+    ping:

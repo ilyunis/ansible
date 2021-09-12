@@ -1,0 +1,36 @@
+
+---
+- name: Test Playbook
+  hosts: all
+  become: yes
+
+  vars:
+    massage1: hello
+    massage2: world
+    secret: noob
+
+  tasks:
+  - name: Print Secret
+    debug: 
+      var: secret
+
+  - debug:
+      msg: "secret lern: {{ secret }}"
+
+  - debug:
+      msg: "This server owner --> {{ owner }} <--"
+
+  - set_fact: full_massage="{{ massage1 }} {{ massage2 }} from {{ owner }}"
+
+  - debug:
+      var: full_massage
+
+  - debug:
+      var: ansible_distribution
+
+  - shell: uptime
+    register: results
+
+  - debug:
+      var: results.stdout
+

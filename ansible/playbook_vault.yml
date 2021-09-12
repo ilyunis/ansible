@@ -1,0 +1,29 @@
+---
+
+- name: ansible vault
+  hosts: all
+  become: yes
+
+  vars:
+   admin_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          64343638613431333932623962643466396134626461313764333366346331306138613036663836
+          3730623333613764313961303732323038376165333162390a333435616434643762306566616532
+          33343738383464623532316563396233313739393966623233356565386136626363666131373435
+          3733376466346138390a633733633466383263333963353733383863336637303739383662353136
+          3032
+
+
+  tasks:
+  
+  - name: install tree
+    apt: name=tree state=present
+
+  - name: create config file
+    copy:
+     dest: "/home/client/myconfig.conf"
+     content:
+      port = 9092
+      log = 7days
+      home = /opt/kafka/bin/
+      password = {{ admin_password }}

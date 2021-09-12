@@ -1,0 +1,44 @@
+---
+
+- name: My Playbook
+  hosts: all
+  become: yes
+
+  vars:
+   mytext: "Privet mir"
+
+  tasks:
+  - name: ping
+    ping:
+
+  - name: Unregister
+    shell: echo This server {{ inventory_hostname}} was deregistered, node name is {{ ansible_nodename }} >> /home/log.txt
+    delegate_to: 127.0.0.1
+
+  - name: Create file1
+    copy:
+     dest: /home/fileTask.txt
+     content:
+      File for linux2
+    delegate_to: linux2
+
+  - name: Create file2
+    copy:
+     dest: /home/fileTask2.txt
+     content:
+      File for linux
+ 
+  - name: Reboot servers
+    shell: sleep 3 && reboot now
+    async: 1
+    poll: 0
+
+  - name: Wait till my servers
+    wait_for:
+     host: "{{ inventory_hostname }}"
+     state: started
+     delay: 5
+     timeout: 40
+    delegate_to: 127.0.0.1
+
+  

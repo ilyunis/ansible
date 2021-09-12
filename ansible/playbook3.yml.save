@@ -1,0 +1,68 @@
+
+---
+- name: Install Apache and Upload my Web Page
+  hosts: all
+  become: yes
+
+  vars:
+   source_file: ./WebSite/index.html
+   destin_file: /var/www/html
+  
+  tasks:
+
+  - name: Chek and Print Linux Version
+    debug: var=ansible_os_family
+
+
+
+  - block:
+
+ 
+       - name: Install Apache Web Server for Debian
+       apt: name=apache2 state=present
+       when: ansible_os_family == "Debian"
+
+       <!doctype html>
+ 
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+ 
+  <title>The HTML5 Herald</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+ 
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+ 
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+ 
+<body>
+  Hello world!
+</body>
+</html>
+
+
+  - name: Install Apache Server for RedHat
+    yum: name=httpd state=present
+    when: ansible_os_family == "RedHat"
+
+  - name: Copy MyHomePage to Servers
+    copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+#    notify: Restart Apache
+
+
+  - name: Start WebServer for RedHat
+    service: name=httpd state=started enabled=yes
+    when: ansible_os_family == "RedHat"
+
+  handlers:
+  - name: Restart Apache for Debian
+    service: name=apache2 state=restarted
+    when: ansible_os_family == "Debian"
+
+  - name: Restart Apache for RedHat
+    service: name=httpd state=restarted
+    when: ansible_os_family == "RedHat"

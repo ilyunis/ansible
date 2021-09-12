@@ -1,0 +1,20 @@
+---
+
+- name: Ansible error
+  hosts: all
+  any_errors_fatal: true
+  become: yes
+
+  tasks:
+  - name: TaskNumber1
+    apt: name=treeeee state=present
+    ignore_errors: yes
+
+
+  - name: Tasknumber2
+    shell: echo hello world
+    register: results
+    failed_when: results.rc==0
+
+  - name: Tasknumber3
+    shell: echo Privet

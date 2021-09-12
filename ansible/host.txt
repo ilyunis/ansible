@@ -1,0 +1,6 @@
+[staging_servers]
+linuxX   ansible_host=192.168.0.102   owner=ilia
+
+[prod_servers]
+linux1   ansible_host=192.168.0.103   owner=duda
+linux2   ansible_host=192.168.0.104   owner=papa
